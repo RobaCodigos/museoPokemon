@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Museo de Coleccionista</title>
+    <title>Galería de Exhibición</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/museo.css">
 </head>
@@ -12,22 +12,25 @@
     <div class="game-wrapper">
         <!-- Pantalla de Bienvenida -->
         <div id="pantalla-start">
-            <h1 class="museum-title">GALERÍA PRIVADA</h1>
-            <p>▶ TOCAR PARA ENTRAR</p>
+            <h1 class="museum-title">COLECCIÓN PRIVADA</h1>
+            <p>▶ TOCAR PARA ENTRAR AL PASILLO</p>
         </div>
 
-        <!-- El Museo -->
+        <!-- El Museo Parallax -->
         <div id="pantalla-museo" class="oculto">
+            
+            <!-- El fondo de pared (se moverá lento para crear 3D) -->
+            <div id="museum-bg"></div>
+            
+            <!-- Foco de luz fijo en el centro -->
             <div class="spotlight"></div>
             
-            <div class="room-container" id="sala-exhibicion">
-                <!-- Se inyecta la obra por JS -->
+            <!-- La pista donde están todas las cartas alineadas (se moverá rápido) -->
+            <div id="gallery-track">
+                <!-- Se inyectan las obras por JS aquí -->
             </div>
 
-            <!-- Indicador inferior -->
-            <div class="swipe-hint">
-                &lt; Desliza para explorar &gt;
-            </div>
+            <div class="swipe-hint">&lt; Arrastra por el pasillo &gt;</div>
         </div>
     </div>
 
