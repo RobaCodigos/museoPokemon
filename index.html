@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Museo de Coleccionista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/museo.css">
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <!-- Pantalla de Bienvenida -->
+        <div id="pantalla-start">
+            <h1 class="museum-title">GALERÍA PRIVADA</h1>
+            <p>▶ TOCAR PARA ENTRAR</p>
+        </div>
+
+        <!-- El Museo -->
+        <div id="pantalla-museo" class="oculto">
+            <div class="spotlight"></div>
+            
+            <div class="room-container" id="sala-exhibicion">
+                <!-- Se inyecta la obra por JS -->
+            </div>
+
+            <!-- Indicador inferior -->
+            <div class="swipe-hint">
+                &lt; Desliza para explorar &gt;
+            </div>
+        </div>
+    </div>
+
+    <script src="js/museo.js"></script>
+</body>
+</html>

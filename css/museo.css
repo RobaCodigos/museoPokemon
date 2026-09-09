@@ -1,0 +1,81 @@
+body, html {
+    margin: 0; padding: 0; background-color: #050505; 
+    color: #e0e0e0; font-family: 'Montserrat', sans-serif;
+    overflow: hidden; width: 100vw; height: 100vh; position: fixed;
+}
+
+/* --- BLOQUEO HORIZONTAL ABSOLUTO --- */
+.game-wrapper {
+    position: absolute; top: 50%; left: 50%;
+    display: flex; justify-content: center; align-items: center;
+    background-color: #050505;
+}
+
+@media screen and (orientation: portrait) {
+    .game-wrapper { width: 100vh; height: 100vw; transform: translate(-50%, -50%) rotate(90deg); }
+}
+@media screen and (orientation: landscape) {
+    .game-wrapper { width: 100vw; height: 100vh; transform: translate(-50%, -50%); }
+}
+
+/* --- ESTILOS DE INICIO --- */
+#pantalla-start {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #0a0a0a; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; z-index: 50; cursor: pointer;
+}
+.museum-title { font-family: 'Cinzel', serif; color: #d4af37; letter-spacing: 4px; font-size: 2rem; margin-bottom: 20px;}
+#pantalla-start p { animation: parpadeo 1.5s infinite; font-size: 0.9rem; color: #888; letter-spacing: 2px;}
+@keyframes parpadeo { 50% { opacity: 0; } }
+
+.oculto { display: none !important; }
+
+/* --- EL MUSEO --- */
+#pantalla-museo {
+    width: 100%; height: 100%; display: flex;
+    justify-content: center; align-items: center; position: relative;
+}
+
+.spotlight {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at top, rgba(255,255,255,0.08) 0%, transparent 70%);
+    z-index: 0; pointer-events: none;
+}
+
+/* Diseño de la sala dividida (Carta Izquierda, Placa Derecha) */
+.room-container {
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    width: 90%; height: 85%; z-index: 1; gap: 40px;
+    opacity: 1; transition: opacity 0.5s ease;
+}
+.fade-out { opacity: 0; }
+
+.artwork-container {
+    flex: 1; display: flex; justify-content: flex-end; align-items: center;
+    height: 100%;
+}
+.card-img {
+    max-height: 95%; max-width: 100%; border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.1);
+}
+
+.plaque-container {
+    flex: 1; background: linear-gradient(145deg, #1a1a1a, #101010);
+    border: 1px solid #333; border-radius: 8px; padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+    max-width: 400px;
+}
+
+.card-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #d4af37; margin: 0 0 5px 0; }
+.card-meta { font-size: 0.7rem; color: #777; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+.card-description { font-size: 0.85rem; line-height: 1.6; color: #ccc; text-align: justify; margin-bottom: 25px; }
+
+.btn-audioguide {
+    background: transparent; color: #d4af37; border: 1px solid #d4af37; border-radius: 20px;
+    padding: 8px 15px; font-family: 'Cinzel', serif; font-size: 0.7rem; cursor: pointer; letter-spacing: 1px;
+}
+.btn-audioguide:active { transform: scale(0.95); background: rgba(212, 175, 55, 0.1); }
+
+.swipe-hint { position: absolute; bottom: 15px; width: 100%; text-align: center; color: #555; font-size: 0.7rem; letter-spacing: 3px; animation: pulse 2s infinite; z-index: 10; pointer-events: none;}
+@keyframes pulse { 50% { opacity: 0.3; } }
