@@ -317,10 +317,11 @@ function iniciarParticulasMuseo() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 12. PANTALLA DE CARGA (solo index.html)
+// ─────────────────────────────────────────────────────────────────────────────
+// 12. PANTALLA DE CARGA Y RENDERIZADO DINÁMICO
 // ─────────────────────────────────────────────────────────────────────────────
 async function cargarCatalogo() {
-    actualizarProgreso(20, 'Conectando con la exhibición...');
+    if (pantallaLoading) actualizarProgreso(20, 'Conectando con la exhibición...');
     let datos = null;
 
     if (JSONBIN_URL && !JSONBIN_URL.includes('YOUR_BIN_ID')) {
@@ -335,41 +336,28 @@ async function cargarCatalogo() {
     }
 
     if (!datos) {
-        actualizarProgreso(40, 'Cargando catálogo local...');
+        if (pantallaLoading) actualizarProgreso(40, 'Cargando catálogo local...');
         try {
-            const res = await fetch('data/cartas.json');
+            // Check if we need ../ for local json (if in html/ folder)
+            const jsonPath = esSalaDirecta ? '../data/cartas.json' : 'data/cartas.json';
+            const res = await fetch(jsonPath);
             if (res.ok) datos = await res.json();
         } catch (e) { console.error('Error cargando data/cartas.json:', e); }
     }
 
-    catalogo = Array.isArray(datos) && datos.length > 0 ? datos : [];
-    actualizarProgreso(100, '¡Colección lista para explorar!');
-
-    if (btnEnter) {
-        btnEnter.style.display = 'inline-block';
-        btnEnter.style.opacity = '1';
-    }
-    if (loadingStatusText) loadingStatusText.innerText = 'COLECCIÓN LISTA';
-}
-
-function actualizarProgreso(pct, msg) {
-    if (progressBarFill)   progressBarFill.style.width = `${pct}%`;
-    if (loadingStatusText) loadingStatusText.innerText = msg;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 13. INICIO DE LA APLICACIÓN
-// ─────────────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    iniciarParticulasMuseo();
+    let arrayDatos = Array.isArray(datos) && datos.length > 0 ? datos : [];
 
     if (esSalaDirecta) {
-        // Estamos en sala1.html / sala2.html / sala3.html: galería HTML manual
-        // Inicializamos la posición directamente
+        // Estamos en sala1.html, sala2.html o sala3.html
+        const match = window.location.href.match(/sala[1-3]/);
+        const salaActual = match ? match[0] : 'sala1';
+        
+        // Filtramos para quedarnos solo con las de esta sala
+        catalogo = arrayDatos.filter(c => c.sala === salaActual);
+        renderizarGaleria(salaActual);
+        
         indiceActual = 0;
         actualizarPosicion(false);
-
-        // Pequeña animación de entrada
         if (track) {
             track.style.opacity = '0';
             setTimeout(() => {
@@ -378,7 +366,103 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 80);
         }
     } else {
-        // Estamos en index.html: ejecutar pantalla de carga
-        cargarCatalogo();
+        // Estamos en index.html
+        catalogo = arrayDatos;
+        if (pantallaLoading) actualizarProgreso(100, '¡Colección lista para explorar!');
+        if (btnEnter) {
+            btnEnter.style.display = 'inline-block';
+            btnEnter.style.opacity = '1';
+        }
+        if (loadingStatusText) loadingStatusText.innerText = 'COLECCIÓN LISTA';
     }
+}
+
+function renderizarGaleria(salaActual) {
+    if (!track) return;
+    
+    // Configuración de la siguiente sala (puerta al final)
+    const nextRoomInfo = {
+        'sala1': { next: 'sala2.html', title: 'Sala 2', desc: 'Avanza a la Sala 2: Reliquias LEGEND para continuar el recorrido.' },
+        'sala2': { next: 'sala3.html', title: 'Sala 3', desc: 'Avanza a la Sala 3: Obras Modernas para continuar el recorrido.' },
+        'sala3': { next: '../index.html', title: 'Recibidor', desc: 'Has terminado el recorrido. Vuelve al lobby principal.' }
+    };
+    const info = nextRoomInfo[salaActual];
+
+    // Vaciar pista (eliminar hardcodeadas)
+    let html = '';
+
+    // Si no hay cartas en la sala
+    if (catalogo.length === 0) {
+        html += `
+        <div class="exhibit" id="exhibit-0">
+            <div class="plaque-container" style="text-align:center; padding: 40px;">
+                <h1 class="card-title">SALA EN CONSTRUCCIÓN</h1>
+                <div class="card-description">Pronto llegarán nuevas obras a esta sala.</div>
+            </div>
+        </div>`;
+    } else {
+        // Renderizar cada carta
+        catalogo.forEach((c, idx) => {
+            const img = c.imagen || c.imagen_fallback || '';
+            const fallback = c.imagen_fallback || '';
+            const desc = (c.descripcion || 'Sin descripción').replace(/"/g, '&quot;');
+            
+            html += `
+            <div class="exhibit inactive" id="exhibit-${idx}">
+                <div class="artwork-container">
+                    <div class="card-frame" id="card-frame-${idx}">
+                        <div class="card-img-wrapper">
+                            <img src="${img}" class="card-img" alt="${c.titulo}" onerror="this.src='${fallback}'; this.onerror=null;">
+                            <div class="holo-shine" id="holo-shine-${idx}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="plaque-container">
+                    <div class="plaque-header-row">
+                        <span class="plaque-rarity-badge">${c.rarity || 'Desconocida'}</span>
+                    </div>
+                    <h1 class="card-title">${c.titulo}</h1>
+                    <div class="card-meta">
+                        <span>${c.set || '—'}</span> • ${c.year || '—'}<br>Ilustrador: ${c.artist || '—'}
+                    </div>
+                    <div class="card-description">
+                        ${c.descripcion || ''}
+                    </div>
+                    <button class="btn-audioguide" id="audio-btn-${idx}" onclick="reproducirAudio(${idx})">
+                        <span>▶</span> AUDIOGUÍA ESPAÑOL
+                    </button>
+                </div>
+            </div>`;
+        });
+    }
+
+    // Añadir puerta de siguiente sala al final
+    if (info) {
+        html += `
+        <div class="exhibit room-door-card inactive" id="exhibit-next-room">
+            <div class="plaque-container room-door-box">
+                <div class="door-icon">🚪</div>
+                <h2 class="door-title">${info.title}</h2>
+                <p class="door-desc">${info.desc}</p>
+                <button class="btn-enter-room" onclick="cambiarDeSala('${info.next}')">ENTRAR A ${info.title.toUpperCase()}</button>
+            </div>
+        </div>`;
+    }
+
+    track.innerHTML = html;
+}
+
+if (pantallaLoading) {
+    function actualizarProgreso(pct, msg) {
+        if (progressBarFill)   progressBarFill.style.width = `${pct}%`;
+        if (loadingStatusText) loadingStatusText.innerText = msg;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 13. INICIO DE LA APLICACIÓN
+// ─────────────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    iniciarParticulasMuseo();
+    cargarCatalogo(); // Ahora esto lo carga todo dinámicamente siempre
 });
