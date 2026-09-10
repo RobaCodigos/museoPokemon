@@ -289,7 +289,8 @@
             transition:var(--t); position:relative; overflow:hidden;
         }
         .upload-zone:hover { border-color:var(--gold-dark); background:rgba(212,175,55,.04); }
-        .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+        .upload-zone.dragover { border-color:var(--gold); background:rgba(212,175,55,.1); transform:scale(1.02); }
+        .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; z-index:10; }
         .uz-icon { font-size:1.5rem; margin-bottom:4px; }
         .uz-label { font-size:.74rem; color:var(--muted); }
         .uz-label strong { color:var(--gold); }
@@ -810,6 +811,29 @@ async function subirImgBB(input, lado) {
         toast('Error ImgBB: ' + e.message, 'err');
     }
 }
+
+// DRAG AND DROP VISUALS
+['frente', 'reves'].forEach(lado => {
+    const zone = document.getElementById('zone-' + lado);
+    const input = document.getElementById('file-' + lado);
+    
+    zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', e => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+    });
+    zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            input.files = e.dataTransfer.files;
+            subirImgBB(input, lado);
+        }
+    });
+});
 
 // ══════════════════════════════════════════════════════
 // GUARDAR (CREAR / EDITAR)
