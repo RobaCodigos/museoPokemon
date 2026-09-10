@@ -421,9 +421,6 @@
             <button class="m-close" onclick="cerrarModal()">✕</button>
         </div>
         <div class="m-body">
-            <div class="note-box">
-                💡 <strong>Imágenes:</strong> introduce la URL de la imagen o la ruta relativa desde la raíz del repositorio (ej: <code>img/cards/pikachu.png</code>). Las imágenes deben estar subidas al repo de GitHub.
-            </div>
             <div class="fg" id="form-grid">
                 <!-- Sala y Rareza -->
                 <div class="fgroup">
@@ -459,7 +456,7 @@
                     <input class="finput" type="text" id="f-artist" placeholder="Ken Sugimori">
                 </div>
                 <div class="fgroup">
-                    <label class="flabel">ID <span style="color:var(--dim);font-size:.58rem;text-transform:none;">(opcional — se autogenera)</span></label>
+                    <label class="flabel">ID <span style="color:var(--dim);font-size:.58rem;text-transform:none;">(opcional)</span></label>
                     <input class="finput" type="text" id="f-id" placeholder="gengar-gym-2000" pattern="[a-z0-9\-]+">
                 </div>
                 <!-- Descripción -->
@@ -467,18 +464,36 @@
                     <label class="flabel">Descripción del Museo</label>
                     <textarea class="ftxt" id="f-desc" placeholder="Texto de la plaqueta informativa…" rows="3"></textarea>
                 </div>
-                <!-- Imagen frente -->
+
+                <!-- ── IMAGEN FRENTE ── -->
                 <div class="fgroup s2">
-                    <label class="flabel">URL / Ruta Imagen Frente (Portada)</label>
-                    <input class="finput" type="text" id="f-img-frente" placeholder="img/cards/gengar.png  o  https://…" oninput="prevURL(this,'prev-frente')">
-                    <img id="prev-frente" class="uz-prev" alt="Preview frente">
+                    <label class="flabel">🃏 Portada (Frente) <span style="color:var(--dim);font-size:.58rem;text-transform:none;">· se sube a ImgBB automáticamente</span></label>
+                    <div class="upload-zone" id="zone-frente">
+                        <input type="file" id="file-frente" accept="image/*" onchange="subirImgBB(this,'frente')">
+                        <div class="uz-icon" id="uz-icon-frente">🃏</div>
+                        <div class="uz-label" id="uz-label-frente">Arrastra o <strong>elige archivo</strong></div>
+                        <div class="uz-sub">JPG · PNG · WebP · máx 32 MB</div>
+                        <img class="uz-prev" id="prev-frente" alt="Preview frente">
+                    </div>
+                    <!-- URL resultante (oculto) -->
+                    <input type="hidden" id="f-img-frente" value="">
+                    <div id="status-frente" style="font-size:.68rem;color:var(--muted);margin-top:4px;"></div>
                 </div>
-                <!-- Imagen reverso -->
+
+                <!-- ── IMAGEN REVERSO ── -->
                 <div class="fgroup s2">
-                    <label class="flabel">URL / Ruta Imagen Reverso <span style="color:var(--dim);font-size:.58rem;text-transform:none;">(opcional)</span></label>
-                    <input class="finput" type="text" id="f-img-reves" placeholder="img/cards/gengar_back.png  o  https://…" oninput="prevURL(this,'prev-reves')">
-                    <img id="prev-reves" class="uz-prev" alt="Preview reverso">
+                    <label class="flabel">↩ Reverso <span style="color:var(--dim);font-size:.58rem;text-transform:none;">· opcional</span></label>
+                    <div class="upload-zone" id="zone-reves">
+                        <input type="file" id="file-reves" accept="image/*" onchange="subirImgBB(this,'reves')">
+                        <div class="uz-icon" id="uz-icon-reves">↩️</div>
+                        <div class="uz-label" id="uz-label-reves">Arrastra o <strong>elige archivo</strong></div>
+                        <div class="uz-sub">Parte de atrás de la carta · opcional</div>
+                        <img class="uz-prev" id="prev-reves" alt="Preview reverso">
+                    </div>
+                    <input type="hidden" id="f-img-reves" value="">
+                    <div id="status-reves" style="font-size:.68rem;color:var(--muted);margin-top:4px;"></div>
                 </div>
+
                 <!-- Fallback URL -->
                 <div class="fgroup s2">
                     <label class="flabel">URL de Fallback <span style="color:var(--dim);font-size:.58rem;text-transform:none;">(si la imagen principal falla)</span></label>
@@ -519,6 +534,12 @@ const JB_BIN    = '6aa26828ffd5d16053f558da';
 const JB_KEY    = '$2a$10$lntiSbMqKlrKhjvk4ohkk.anTQ2w976hTiyQhBGwW3j9Pwa80Ryuu';
 const JB_URL    = `https://api.jsonbin.io/v3/b/${JB_BIN}`;
 const JB_HEADS  = { 'X-Master-Key': JB_KEY, 'Content-Type': 'application/json' };
+
+// ══════════════════════════════════════════════════════
+// CONFIGURACIÓN IMGBB
+// ══════════════════════════════════════════════════════
+const IMGBB_KEY = '65a688faef90d934088b7e34f500e1e5';
+const IMGBB_URL = 'https://api.imgbb.com/1/upload';
 
 // ══════════════════════════════════════════════════════
 // ESTADO
@@ -686,28 +707,108 @@ function abrirEdicion(id) {
     document.getElementById('f-artist').value  = c.artist  || '';
     document.getElementById('f-id').value      = '';
     document.getElementById('f-desc').value    = c.descripcion || '';
-    document.getElementById('f-img-frente').value = c.imagen      || '';
-    document.getElementById('f-img-reves').value  = c.imagen_reves|| '';
-    document.getElementById('f-fallback').value   = c.imagen_fallback || '';
-    prevURL(document.getElementById('f-img-frente'), 'prev-frente');
-    prevURL(document.getElementById('f-img-reves'),  'prev-reves');
+    document.getElementById('f-fallback').value = c.imagen_fallback || '';
+    // Precargar URLs actuales en los campos ocultos y previews
+    limpiarForm();
+    if (c.imagen) {
+        document.getElementById('f-img-frente').value = c.imagen;
+        const p = document.getElementById('prev-frente');
+        p.src = c.imagen; p.style.display = 'block';
+        document.getElementById('uz-label-frente').innerHTML = '<strong style="color:var(--success)">Imagen actual cargada</strong>';
+        document.getElementById('uz-icon-frente').textContent = '🖼️';
+    }
+    if (c.imagen_reves) {
+        document.getElementById('f-img-reves').value = c.imagen_reves;
+        const p = document.getElementById('prev-reves');
+        p.src = c.imagen_reves; p.style.display = 'block';
+        document.getElementById('uz-label-reves').innerHTML = '<strong style="color:var(--success)">Imagen actual cargada</strong>';
+        document.getElementById('uz-icon-reves').textContent = '🖼️';
+    }
+    // Re-setear campos de texto que limpiarForm limpió
+    document.getElementById('f-sala').value    = c.sala    || '';
+    document.getElementById('f-rarity').value  = c.rarity  || '';
+    document.getElementById('f-titulo').value  = c.titulo  || '';
+    document.getElementById('f-set').value     = c.set     || '';
+    document.getElementById('f-year').value    = c.year    || '';
+    document.getElementById('f-artist').value  = c.artist  || '';
+    document.getElementById('f-desc').value    = c.descripcion || '';
+    document.getElementById('f-fallback').value = c.imagen_fallback || '';
     document.getElementById('modal-bd').classList.add('open');
 }
 
 function cerrarModal() { document.getElementById('modal-bd').classList.remove('open'); }
 
 function limpiarForm() {
-    ['f-sala','f-rarity','f-titulo','f-set','f-year','f-artist','f-id','f-desc','f-img-frente','f-img-reves','f-fallback'].forEach(id => {
+    ['f-sala','f-rarity','f-titulo','f-set','f-year','f-artist','f-id','f-desc','f-fallback'].forEach(id => {
         document.getElementById(id).value = '';
     });
-    ['prev-frente','prev-reves'].forEach(id => { const el=document.getElementById(id); el.src=''; el.style.display='none'; });
+    // Limpiar zonas de imagen
+    resetZona('frente');
+    resetZona('reves');
 }
 
-function prevURL(input, prevId) {
-    const url = input.value.trim();
-    const el  = document.getElementById(prevId);
-    if (url) { el.src = url; el.style.display = 'block'; }
-    else      { el.src = ''; el.style.display = 'none'; }
+function resetZona(lado) {
+    document.getElementById('f-img-' + lado).value = '';
+    document.getElementById('file-' + lado).value  = '';
+    const prev = document.getElementById('prev-' + lado);
+    prev.src = ''; prev.style.display = 'none';
+    document.getElementById('uz-icon-'  + lado).style.display  = '';
+    document.getElementById('uz-label-' + lado).style.display  = '';
+    document.getElementById('status-'   + lado).textContent    = '';
+    document.getElementById('zone-' + lado).style.borderColor  = '';
+}
+
+// ══════════════════════════════════════════════════════
+// IMGBB: SUBIR IMAGEN DESDE NAVEGADOR
+// ══════════════════════════════════════════════════════
+async function subirImgBB(input, lado) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const statusEl = document.getElementById('status-' + lado);
+    const iconEl   = document.getElementById('uz-icon-' + lado);
+    const labelEl  = document.getElementById('uz-label-' + lado);
+    const zoneEl   = document.getElementById('zone-' + lado);
+    const prevEl   = document.getElementById('prev-' + lado);
+    const hiddenEl = document.getElementById('f-img-' + lado);
+
+    // Preview local inmediato
+    const reader = new FileReader();
+    reader.onload = e => { prevEl.src = e.target.result; prevEl.style.display = 'block'; };
+    reader.readAsDataURL(file);
+
+    // Estado: subiendo
+    iconEl.textContent  = '⏳';
+    labelEl.innerHTML   = 'Subiendo a ImgBB…';
+    statusEl.textContent = '';
+    zoneEl.style.borderColor = 'var(--gold-dark)';
+
+    try {
+        const fd = new FormData();
+        fd.append('key',   IMGBB_KEY);
+        fd.append('image', file);
+
+        const res  = await fetch(IMGBB_URL, { method: 'POST', body: fd });
+        const json = await res.json();
+
+        if (!json.success) throw new Error(json.error?.message || 'Error ImgBB');
+
+        const url = json.data.url;
+        hiddenEl.value = url;
+
+        iconEl.textContent    = '✅';
+        labelEl.innerHTML     = '<strong style="color:var(--success)">Subida correctamente</strong>';
+        statusEl.innerHTML    = `<a href="${url}" target="_blank" style="color:var(--gold);word-break:break-all;">${url}</a>`;
+        zoneEl.style.borderColor = 'var(--success)';
+        toast('📤 Imagen subida a ImgBB', 'ok');
+
+    } catch(e) {
+        iconEl.textContent    = '❌';
+        labelEl.innerHTML     = '<strong style="color:var(--danger)">Error al subir</strong>';
+        statusEl.textContent  = e.message;
+        zoneEl.style.borderColor = 'var(--danger)';
+        toast('Error ImgBB: ' + e.message, 'err');
+    }
 }
 
 // ══════════════════════════════════════════════════════
