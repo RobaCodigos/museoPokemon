@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Museo Pokémon | Sala 2: Cartas LEGEND</title>
+    <link rel="stylesheet" href="../css/museo.css">
+</head>
+<body>
+
+    <div id="orientation-warning">
+        <div class="phone-icon-wrapper"><div class="phone-icon"></div></div>
+        <h2 class="warning-title">Modo Horizontal Requerido</h2>
+        <p class="warning-text">Gira tu dispositivo a posición horizontal (Landscape) para explorar la Sala 2 del Museo Pokémon.</p>
+    </div>
+
+    <div class="game-wrapper">
+        <div id="room-transition-overlay" class="room-transition-overlay"></div>
+
+        <div class="category-bar-wrapper">
+            <div class="category-bar">
+                <a href="../index.html" class="cat-pill">🏛️ Recibidor</a>
+                <a href="sala1.html" class="cat-pill">Sala 1: Clásicas</a>
+                <a href="sala2.html" class="cat-pill active">Sala 2: LEGEND</a>
+                <a href="sala3.html" class="cat-pill">Sala 3: Modernas</a>
+            </div>
+        </div>
+
+        <div id="pantalla-museo">
+            <div id="museum-bg" class="bg-sala2"></div>
+            <canvas id="bg-particles"></canvas>
+            <div class="spotlight-beam"></div>
+            <div class="museum-floor-line"></div>
+            <div class="stanchion-rope-bar"></div>
+            <div class="scanlines-overlay"></div>
+            
+            <div id="gallery-track">
+
+                <!-- CARTA 1 SALA 2 -->
+                <div class="exhibit" id="exhibit-0">
+                    <div class="artwork-container">
+                        <div class="card-frame">
+                            <div class="card-img-wrapper">
+                                <img src="../img/cards/rayquaza.png" class="card-img" alt="Rayquaza & Deoxys LEGEND" onerror="this.src='https://images.pokemontcg.io/hgss4/89_hires.png'">
+                                <div class="holo-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plaque-container">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">LEGEND Dual Japonesa</span>
+                        </div>
+                        <h1 class="card-title">Rayquaza & Deoxys LEGEND</h1>
+                        <div class="card-meta">
+                            <span>Clash at Summit (JP)</span> • 2010<br>Ilustrador: Shinji Higuchi
+                        </div>
+                        <div class="card-description">
+                            Mural cósmico dual que requería dos piezas físicas para ser invocado. Un choque espacial en la estratosfera.
+                        </div>
+                        <button class="btn-audioguide" onclick="reproducirAudioManual('Rayquaza y Deoxys LEGEND del año 2010.')">
+                            <span>▶</span> AUDIOGUÍA ESPAÑOL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARTA 2 SALA 2 -->
+                <div class="exhibit inactive" id="exhibit-1">
+                    <div class="artwork-container">
+                        <div class="card-frame">
+                            <div class="card-img-wrapper">
+                                <img src="../img/cards/palkiadialga_top.png" class="card-img" alt="Palkia & Dialga LEGEND" onerror="this.src='https://images.pokemontcg.io/hgss3/101_hires.png'">
+                                <div class="holo-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plaque-container">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">LEGEND Dual</span>
+                        </div>
+                        <h1 class="card-title">Palkia & Dialga LEGEND</h1>
+                        <div class="card-meta">
+                            <span>Clash at Summit (JP)</span> • 2010<br>Ilustrador: Shinji Higuchi
+                        </div>
+                        <div class="card-description">
+                            Los amos del tiempo y el espacio en una ilustración combinada sin precedentes.
+                        </div>
+                        <button class="btn-audioguide" onclick="reproducirAudioManual('Palkia y Dialga LEGEND.')">
+                            <span>▶</span> AUDIOGUÍA ESPAÑOL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PUERTA A LA SALA 3 -->
+                <div class="exhibit room-door-card inactive" id="exhibit-next-room">
+                    <div class="plaque-container room-door-box">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Siguiente Sala</span>
+                        </div>
+                        <h1 class="card-title">SALA 3: MODERNAS ➔</h1>
+                        <div class="card-description">
+                            Avanza a la Sala 3 para explorar las ilustraciones modernas SAR, Alt Arts y Promos especiales.
+                        </div>
+                        <button class="btn-audioguide" onclick="cambiarDeSala('sala3.html')">
+                            <span>➔</span> INGRESAR A LA SALA 3
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="swipe-hint">&lt; Arrastra horizontalmente para recorrer la Sala 2 &gt;</div>
+
+            <div class="museum-ui-bar">
+                <button class="nav-btn" id="btn-prev">◄</button>
+                <div class="exhibit-counter" id="exhibit-counter">CARTA 1 DE 2</div>
+                <button class="nav-btn" id="btn-next">►</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/museo.js"></script>
+</body>
+</html>

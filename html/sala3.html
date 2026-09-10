@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Museo Pokémon | Sala 3: Obras Modernas y Secretas</title>
+    <link rel="stylesheet" href="../css/museo.css">
+</head>
+<body>
+
+    <div id="orientation-warning">
+        <div class="phone-icon-wrapper"><div class="phone-icon"></div></div>
+        <h2 class="warning-title">Modo Horizontal Requerido</h2>
+        <p class="warning-text">Gira tu dispositivo a posición horizontal (Landscape) para explorar la Sala 3 del Museo Pokémon.</p>
+    </div>
+
+    <div class="game-wrapper">
+        <div id="room-transition-overlay" class="room-transition-overlay"></div>
+
+        <div class="category-bar-wrapper">
+            <div class="category-bar">
+                <a href="../index.html" class="cat-pill">🏛️ Recibidor</a>
+                <a href="sala1.html" class="cat-pill">Sala 1: Clásicas</a>
+                <a href="sala2.html" class="cat-pill">Sala 2: LEGEND</a>
+                <a href="sala3.html" class="cat-pill active">Sala 3: Modernas</a>
+            </div>
+        </div>
+
+        <div id="pantalla-museo">
+            <div id="museum-bg" class="bg-sala3"></div>
+            <canvas id="bg-particles"></canvas>
+            <div class="spotlight-beam"></div>
+            <div class="museum-floor-line"></div>
+            <div class="stanchion-rope-bar"></div>
+            <div class="scanlines-overlay"></div>
+            
+            <div id="gallery-track">
+
+                <!-- CARTA 1 SALA 3 -->
+                <div class="exhibit" id="exhibit-0">
+                    <div class="artwork-container">
+                        <div class="card-frame">
+                            <div class="card-img-wrapper">
+                                <img src="../img/cards/charizard.png" class="card-img" alt="Charizard ex SAR" onerror="this.src='https://images.pokemontcg.io/sv3pt5/199_hires.png'">
+                                <div class="holo-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plaque-container">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Special Art Rare</span>
+                        </div>
+                        <h1 class="card-title">Charizard ex (SAR)</h1>
+                        <div class="card-meta">
+                            <span>151 / Obsidian Flames</span> • 2023<br>Ilustrador: AKIRA EGAWA
+                        </div>
+                        <div class="card-description">
+                            Furia titánica de Charizard sobre un cañón de magma con textura holográfica y acabados dorados de valor incalculable.
+                        </div>
+                        <button class="btn-audioguide" onclick="reproducirAudioManual('Charizard ex Special Art Rare del año 2023.')">
+                            <span>▶</span> AUDIOGUÍA ESPAÑOL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARTA 2 SALA 3 -->
+                <div class="exhibit inactive" id="exhibit-1">
+                    <div class="artwork-container">
+                        <div class="card-frame">
+                            <div class="card-img-wrapper">
+                                <img src="../img/cards/eevee_sar.png" class="card-img" alt="Eevee ex SAR JP" onerror="this.src='https://images.pokemontcg.io/sv8/188_hires.png'">
+                                <div class="holo-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plaque-container">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Terastal SAR Japonesa</span>
+                        </div>
+                        <h1 class="card-title">Eevee ex (SAR JP)</h1>
+                        <div class="card-meta">
+                            <span>Terastal Festival (JP)</span> • 2024<br>Ilustrador: Teeziro
+                        </div>
+                        <div class="card-description">
+                            Una obra deslumbrante con efecto cristalino Terastal de última generación.
+                        </div>
+                        <button class="btn-audioguide" onclick="reproducirAudioManual('Eevee ex SAR Terastal Festival.')">
+                            <span>▶</span> AUDIOGUÍA ESPAÑOL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VOLVER AL INICIO -->
+                <div class="exhibit room-door-card inactive" id="exhibit-next-room">
+                    <div class="plaque-container room-door-box">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Fin del Recorrido</span>
+                        </div>
+                        <h1 class="card-title">🏛️ VOLVER AL INICIO ↺</h1>
+                        <div class="card-description">
+                            Has recorrido las salas principales. Haz clic para regresar a la pantalla principal del recibidor del museo.
+                        </div>
+                        <button class="btn-audioguide" onclick="cambiarDeSala('../index.html')">
+                            <span>↺</span> IR AL RECIBIDOR
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="swipe-hint">&lt; Arrastra horizontalmente para recorrer la Sala 3 &gt;</div>
+
+            <div class="museum-ui-bar">
+                <button class="nav-btn" id="btn-prev">◄</button>
+                <div class="exhibit-counter" id="exhibit-counter">CARTA 1 DE 2</div>
+                <button class="nav-btn" id="btn-next">►</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/museo.js"></script>
+</body>
+</html>

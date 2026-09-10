@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Museo Pokémon | Galería Privada de Cartas</title>
-    <meta name="description" content="Una experiencia inmersiva horizontal de exhibición de cartas Pokémon de colección estilo museo de lujo.">
-    <link rel="stylesheet" href="css/museo.css">
+    <title>Museo Pokémon | Galería de Exhibición</title>
+    <link rel="stylesheet" href="../css/museo.css">
 </head>
 <body>
 
@@ -19,59 +18,42 @@
     </div>
 
     <div class="game-wrapper">
-        <!-- PANTALLA DE CARGA INICIAL CON CONTENEDOR PARA GIF -->
+        <!-- PANTALLA DE CARGA REDUCIDA PARA NAVEGACIÓN DIRECTA -->
         <div id="pantalla-loading">
             <div class="museum-header-badge">Colección Privada</div>
             <h1 class="museum-title-main">MUSEO POKÉMON</h1>
 
-            <!-- Contenedor del GIF de Carga (Coloca tu gif en img/loading.gif) -->
             <div class="gif-container">
-                <img src="img/loading.gif" alt="Cargando Museo Pokémon" onerror="this.style.display='none';">
+                <img src="../img/loading.gif" alt="Cargando Museo Pokémon" onerror="this.style.display='none';">
                 <div class="gif-fallback-spinner"></div>
             </div>
 
-            <div class="loading-status-text" id="loading-status-text">Conectando con la exhibición...</div>
+            <div class="loading-status-text" id="loading-status-text">Cargando colección...</div>
 
-            <!-- Barra de Progreso Dorada -->
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
 
-            <!-- Botón para entrar al museo una vez cargado -->
-            <button class="btn-enter-museum" id="btn-enter" onclick="cambiarDeSala('html/sala1.html')">
-                ENTRAR A LA SALA 1
+            <button class="btn-enter-museum" id="btn-enter">
+                ENTRAR AL PASILLO
             </button>
         </div>
 
-        <div id="room-transition-overlay" class="room-transition-overlay"></div>
-
         <!-- EL PASILLO HORIZONTAL DEL MUSEO -->
         <div id="pantalla-museo" class="oculto">
-            
-            <!-- Barra Superior de Salas -->
             <div class="category-bar-wrapper">
-                <div class="category-bar">
-                    <a href="index.html" class="cat-pill active">🏛️ Recibidor</a>
-                    <a href="html/sala1.html" class="cat-pill">Sala 1: Clásicas</a>
-                    <a href="html/sala2.html" class="cat-pill">Sala 2: LEGEND</a>
-                    <a href="html/sala3.html" class="cat-pill">Sala 3: Modernas</a>
-                </div>
+                <div class="category-bar" id="category-bar"></div>
             </div>
-
-            <!-- Capas de Fondo 3D Parallax, Partículas y Scanlines Retro -->
-            <div id="museum-bg" class="bg-lobby"></div>
+            <div id="museum-bg" class="bg-sala1"></div>
             <canvas id="bg-particles"></canvas>
             <div class="spotlight-beam"></div>
             <div class="museum-floor-line"></div>
-            <div class="stanchion-rope-bar"></div>
             <div class="scanlines-overlay"></div>
             
-            <!-- Pista Horizontal de Obras de Arte (Inyectadas por JS) -->
             <div id="gallery-track"></div>
 
             <div class="swipe-hint">&lt; Arrastra horizontalmente para recorrer las salas &gt;</div>
 
-            <!-- Barra de Navegación del Museo -->
             <div class="museum-ui-bar">
                 <button class="nav-btn" id="btn-prev" title="Carta Anterior">◄</button>
                 <div class="exhibit-counter" id="exhibit-counter">OBRA 1 DE --</div>
@@ -80,6 +62,6 @@
         </div>
     </div>
 
-    <script src="js/museo.js"></script>
+    <script src="../js/museo.js"></script>
 </body>
 </html>

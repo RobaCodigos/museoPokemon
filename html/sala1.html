@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Museo Pokémon | Sala 1: Reliquias Clásicas</title>
+    <link rel="stylesheet" href="../css/museo.css">
+</head>
+<body>
+
+    <!-- AVISO DE GIRO DE PANTALLA MÓVIL HORIZONTAL -->
+    <div id="orientation-warning">
+        <div class="phone-icon-wrapper"><div class="phone-icon"></div></div>
+        <h2 class="warning-title">Modo Horizontal Requerido</h2>
+        <p class="warning-text">Gira tu dispositivo a posición horizontal (Landscape) para explorar la Sala 1 del Museo Pokémon.</p>
+    </div>
+
+    <div class="game-wrapper">
+        <!-- TELÓN / TRANSICIÓN DE SALA FLUIDA -->
+        <div id="room-transition-overlay" class="room-transition-overlay"></div>
+
+        <!-- BARRA SUPERIOR DE SALAS Y NAVEGACIÓN -->
+        <div class="category-bar-wrapper">
+            <div class="category-bar">
+                <a href="../index.html" class="cat-pill">🏛️ Recibidor</a>
+                <a href="sala1.html" class="cat-pill active">Sala 1: Clásicas</a>
+                <a href="sala2.html" class="cat-pill">Sala 2: LEGEND</a>
+                <a href="sala3.html" class="cat-pill">Sala 3: Modernas</a>
+            </div>
+        </div>
+
+        <!-- PASILLO HORIZONTAL DE LA SALA 1 -->
+        <div id="pantalla-museo">
+            <div id="museum-bg" class="bg-sala1"></div>
+            <canvas id="bg-particles"></canvas>
+            <div class="spotlight-beam"></div>
+            <div class="museum-floor-line"></div>
+            <div class="stanchion-rope-bar"></div>
+            <div class="scanlines-overlay"></div>
+            
+            <!-- PISTA DE CARTAS EDITABLES A MANO -->
+            <div id="gallery-track">
+
+                <!-- CARTA 1 (Copia y pega este bloque para añadir más cartas a mano) -->
+                <div class="exhibit" id="exhibit-0">
+                    <div class="artwork-container">
+                        <div class="card-frame">
+                            <div class="card-img-wrapper">
+                                <img src="../img/cards/alakazam.png" class="card-img" alt="Alakazam Base Set" onerror="this.src='https://images.pokemontcg.io/base1/1_hires.png'">
+                                <div class="holo-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plaque-container">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Holo Rare Vintage</span>
+                        </div>
+                        <h1 class="card-title">Alakazam</h1>
+                        <div class="card-meta">
+                            <span>Base Set</span> • 1999<br>Ilustrador: Ken Sugimori
+                        </div>
+                        <div class="card-description">
+                            El psíquico supremo del Base Set original. Una pieza maestra del coleccionismo clásico con acabado holográfico de estrellas.
+                        </div>
+                        <button class="btn-audioguide" onclick="reproducirAudioManual('Alakazam Base Set. El psíquico supremo de 1999.')">
+                            <span>▶</span> AUDIOGUÍA ESPAÑOL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARTA 2 -->
+                <div class="exhibit inactive" id="exhibit-1">
+                    <div class="artwork-container">
+                        <div class="card-frame">
+                            <div class="card-img-wrapper">
+                                <img src="../img/cards/gengar.png" class="card-img" alt="Sabrina's Gengar" onerror="this.src='https://images.pokemontcg.io/gym2/29_hires.png'">
+                                <div class="holo-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plaque-container">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Gym Challenge</span>
+                        </div>
+                        <h1 class="card-title">Sabrina's Gengar</h1>
+                        <div class="card-meta">
+                            <span>Gym Challenge</span> • 2000<br>Ilustrador: Ken Sugimori
+                        </div>
+                        <div class="card-description">
+                            Una pieza maestra del arte vintage. Gengar se funde con las sombras del gimnasio de Ciudad Azafrán.
+                        </div>
+                        <button class="btn-audioguide" onclick="reproducirAudioManual('Sabrina Gengar del año 2000.')">
+                            <span>▶</span> AUDIOGUÍA ESPAÑOL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PUERTA DE PASO A LA SIGUIENTE SALA AL FINAL DEL PASILLO -->
+                <div class="exhibit room-door-card inactive" id="exhibit-next-room">
+                    <div class="plaque-container room-door-box">
+                        <div class="plaque-header-row">
+                            <span class="plaque-rarity-badge">Siguiente Sala</span>
+                        </div>
+                        <h1 class="card-title">SALA 2: LEGEND ➔</h1>
+                        <div class="card-description">
+                            Has llegado al final de la Sala 1. Toca o arrastra para ingresar a la Sala de Cartas LEGEND y Ediciones Especiales.
+                        </div>
+                        <button class="btn-audioguide" onclick="cambiarDeSala('sala2.html')">
+                            <span>➔</span> INGRESAR A LA SALA 2
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="swipe-hint">&lt; Arrastra horizontalmente para recorrer la Sala 1 &gt;</div>
+
+            <!-- CONTROLES NAVEGACIÓN -->
+            <div class="museum-ui-bar">
+                <button class="nav-btn" id="btn-prev">◄</button>
+                <div class="exhibit-counter" id="exhibit-counter">CARTA 1 DE 2</div>
+                <button class="nav-btn" id="btn-next">►</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/museo.js"></script>
+</body>
+</html>
